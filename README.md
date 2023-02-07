@@ -11,5 +11,5 @@ Pfad erstellt.
 
 Für Erstellung einzelner txt files:
 1) Erstelle csv mit gleich entweder positiven oder negativen Ergebnissen
-2) Konfiguriere csv-Pfad
+2) Konfiguriere csv-Pfad, dessen Inhalt gelesen werden soll
 3) Konfiguriere folder-Pfad (am besten Ordner erstellen ("pos" oder "neg") und diesen Pfad einfügen)

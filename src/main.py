@@ -2,10 +2,9 @@ import csv
 import spacy
 import pandas
 
-#TODO: diese Pfadangaben sollten über das git laufen und nicht lokal liegen
-path = '/home/florian/Documents/'
-path_csv = '/home/florian/Documents/test.csv'
-path_folder = '/home/florian/Documents/ST/'
+path = '../resources/'
+path_csv = '../resources/test.csv'
+path_folder = '../resources/st/'
 list_sentence = []
 list_word = []
 
@@ -19,7 +18,7 @@ def main():
     #print(str(list_sentence))
 
     #Mode for creation of txt files can be "sentence" or "full"
-    mode = "full"
+    mode = "sentence"
     createtxtfiles(mode, nlp)
 
 def read():
