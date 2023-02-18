@@ -3,8 +3,8 @@ import spacy
 import pandas
 
 path = '../resources/'
-path_csv = '../resources/test.csv'
-path_folder = '../resources/st/'
+path_csv = '../resources/test_2.csv'
+path_folder = '../resources/dt/'
 list_sentence = []
 list_word = []
 
@@ -23,7 +23,7 @@ def main():
 
 def read():
     f = open(path_csv, newline='')
-    test_csv = csv.DictReader(f, delimiter=',') #wichtig: gebe hiermit Trennzeichen in csv an
+    test_csv = csv.DictReader(f, delimiter=';') #wichtig: gebe hiermit Trennzeichen in csv an
     return test_csv
 
 def write(input, name):
