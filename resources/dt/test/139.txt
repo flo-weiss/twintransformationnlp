@@ -1,0 +1,1 @@
+To facilitate rapid scale-up, companies should try to draw on legacy systems when building new capabilities, rather than replace them entirely.
