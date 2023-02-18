@@ -63,12 +63,10 @@ BERT models are usually pre-trained on a large corpus of text, then fine-tuned f
 ## Setup
 """
 
+# TODO: This stuff cannot be installed try later!
 # A dependency of the preprocessing for BERT inputs
-!pip install -q -U "tensorflow-text==2.11.*"
-
-"""You will use the AdamW optimizer from [tensorflow/models](https://github.com/tensorflow/models)."""
-
-!pip install -q tf-models-official==2.11.0
+#!pip install -q -U "tensorflow-text==2.11.*"
+#!pip install -q tf-models-official==2.11.0
 
 import os
 import shutil
@@ -76,7 +74,15 @@ import shutil
 import tensorflow as tf
 import tensorflow_hub as hub
 import tensorflow_text as text
+from tensorflow.keras import layers
 from official.nlp import optimization  # to create AdamW optimizer
+
+import pandas as pd
+import numpy as np
+
+# Make numpy values easier to read.
+np.set_printoptions(precision=3, suppress=True)
+
 
 import matplotlib.pyplot as plt
 
@@ -93,19 +99,16 @@ You'll use the [Large Movie Review Dataset](https://ai.stanford.edu/~amaas/data/
 Let's download and extract the dataset, then explore the directory structure.
 """
 
-url = 'https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz'
+#url = 'https://drive.google.com/file/d/1ldHGaMOxB_-HhTYooWgJaJY-571Rp9sv/view?usp=share_link'
+url = 'https://github.com/flo-weiss/twintransformationnlp/blob/flo/bertintegration/resources/dt2.tar.xz'
 
-dataset = tf.keras.utils.get_file('aclImdb_v1.tar.gz', url,
+dataset = tf.keras.utils.get_file('/home/florian/Downloads/dt2.tar.xz',origin="none",
                                   untar=True, cache_dir='.',
                                   cache_subdir='')
 
-dataset_dir = os.path.join(os.path.dirname(dataset), 'aclImdb')
+dataset_dir = os.path.join(os.path.dirname(dataset), 'dt2')
 
 train_dir = os.path.join(dataset_dir, 'train')
-
-# remove unused folders to make it easier to load the data
-remove_dir = os.path.join(train_dir, 'unsup')
-shutil.rmtree(remove_dir)
 
 """Next, you will use the `text_dataset_from_directory` utility to create a labeled `tf.data.Dataset`.
 
