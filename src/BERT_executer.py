@@ -24,13 +24,25 @@ def main():
 
     tf.get_logger().setLevel('ERROR')
 
-    createDS()
+    ds = createDS()
+    train_ds = ds[0]
+    val_ds = ds[1]
+    test_ds = ds[2]
+
+
     #TODO: BERT model hier übergeben, damit es nicht in der Methode selbst konfiguriert werden muss
-    configBERT()
-    preprocessing()
-    initModel()
-    build_classifier_model()
-    training()
+    config = configBERT()
+
+    tfhub_handle_encoder = config[0]
+    tfhub_handle_preprocess = config[1]
+    bert_preprocess_model = config[2]
+
+    text_preprocessed = preprocessing(tfhub_handle_preprocess)
+    initModel(text_preprocessed, tfhub_handle_encoder)
+
+    classifier_model = build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder)
+
+    training(tfhub_handle_encoder, train_ds, val_ds, classifier_model)
     evaluation()
     export()
     print_my_examples()
@@ -42,7 +54,7 @@ def createDS():
 
     #TODO: Aktuell läuft das alles nur lokal. Es wäre gut, wenn das DS aus dem Git geladen und dann verwendet würde
     raw_train_ds = tf.keras.utils.text_dataset_from_directory(
-        '/home/florian/PycharmProjects/twintransformationnlp2/resources/dt/train',
+        '/home/florian/PycharmProjects/twintransformationnlp2/resources/train',
         batch_size=batch_size,
         validation_split=0.2,
         subset='training',
@@ -52,7 +64,7 @@ def createDS():
     train_ds = raw_train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
     val_ds = tf.keras.utils.text_dataset_from_directory(
-        '/home/florian/PycharmProjects/twintransformationnlp2/resources/dt/train',
+        '/home/florian/PycharmProjects/twintransformationnlp2/resources/train',
         batch_size=batch_size,
         validation_split=0.2,
         subset='validation',
@@ -61,21 +73,21 @@ def createDS():
     val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
     test_ds = tf.keras.utils.text_dataset_from_directory(
-        '/home/florian/PycharmProjects/twintransformationnlp2/resources/dt/test',
+        '/home/florian/PycharmProjects/twintransformationnlp2/resources/test',
         batch_size=batch_size)
 
     test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
+    ds = [
+        train_ds,
+        val_ds,
+        test_ds
+    ]
 
-    for text_batch, label_batch in train_ds.take(1):
-      for i in range(3):
-        print(f'Review: {text_batch.numpy()[i]}')
-        label = label_batch.numpy()[i]
-        print(f'Label : {label} ({class_names[label]})')
+    return ds
 
 def configBERT():
     # Choose a BERT model to fine-tune
-
     bert_model_name = 'small_bert/bert_en_uncased_L-4_H-512_A-8'
 
     map_name_to_handle = {
@@ -218,11 +230,20 @@ def configBERT():
 
     tfhub_handle_encoder = map_name_to_handle[bert_model_name]
     tfhub_handle_preprocess = map_model_to_preprocess[bert_model_name]
+    bert_preprocess_model = hub.KerasLayer(tfhub_handle_preprocess)
 
     print(f'BERT model selected           : {tfhub_handle_encoder}')
     print(f'Preprocess model auto-selected: {tfhub_handle_preprocess}')
 
-def preprocessing():
+    config = [
+        tfhub_handle_encoder,
+        tfhub_handle_preprocess,
+        bert_preprocess_model,
+    ]
+
+    return config
+
+def preprocessing(tfhub_handle_preprocess):
     bert_preprocess_model = hub.KerasLayer(tfhub_handle_preprocess)
 
     text_test = ['this is such an amazing movie!']
@@ -234,7 +255,9 @@ def preprocessing():
     print(f'Input Mask : {text_preprocessed["input_mask"][0, :12]}')
     print(f'Type Ids   : {text_preprocessed["input_type_ids"][0, :12]}')
 
-def initModel():
+    return text_preprocessed
+
+def initModel(text_preprocessed, tfhub_handle_encoder):
     bert_model = hub.KerasLayer(tfhub_handle_encoder)
 
     bert_results = bert_model(text_preprocessed)
@@ -246,7 +269,7 @@ def initModel():
     print(f'Sequence Outputs Shape:{bert_results["sequence_output"].shape}')
     print(f'Sequence Outputs Values:{bert_results["sequence_output"][0, :12]}')
 
-def build_classifier_model():
+def build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder):
     text_input = tf.keras.layers.Input(shape=(), dtype=tf.string, name='text')
     preprocessing_layer = hub.KerasLayer(tfhub_handle_preprocess, name='preprocessing')
     encoder_inputs = preprocessing_layer(text_input)
@@ -257,16 +280,9 @@ def build_classifier_model():
     net = tf.keras.layers.Dense(1, activation=None, name='classifier')(net)
 
     #War vorher: return tf.keras.Model(text_input, net)
-    tf.keras.Model(text_input, net)
+    return tf.keras.Model(text_input, net)
 
-    classifier_model = build_classifier_model()
-
-    #Diese Zeilen können vermutlich raus
-    bert_raw_result = classifier_model(tf.constant(text_test))
-    print(tf.sigmoid(bert_raw_result))
-    tf.keras.utils.plot_model(classifier_model)
-
-def training():
+def training(tfhub_handle_encoder, train_ds, val_ds, classifier_model):
     loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
     metrics = tf.metrics.BinaryAccuracy()
 

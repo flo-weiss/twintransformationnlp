@@ -3,8 +3,8 @@ import spacy
 import pandas
 
 path = '../resources/'
-path_csv = '../resources/test_3.csv'
-path_folder = '../resources/dt/test/'
+path_csv = '/home/florian/PycharmProjects/twintransformationnlp2/resources/train/tt/TT_Train_Combined.csv'
+path_folder = '../resources/train/tt/'
 list_sentence = []
 list_word = []
 

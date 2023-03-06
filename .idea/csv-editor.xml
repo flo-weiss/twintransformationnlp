@@ -3,7 +3,42 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="/resources/nlpttstuff_unsereundchatgpt/test/tt/TT_Test_Combined.csv">
+        <entry key="/resources/test/dt/DT_Test_Combined.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/resources/test/st/ST_Test_Combined.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/resources/test/tt/TT_Test_Combined.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/resources/train/dt/DT_Train_Combined.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/resources/train/st/ST_Train_Combined.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/resources/train/tt/TT_Train_Combined.csv">
           <value>
             <Attribute>
               <option name="separator" value=";" />
