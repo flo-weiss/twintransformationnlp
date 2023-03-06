@@ -1,1 +1,0 @@
-The cloud platform will be delivered as a managed infrastructure service in HSBC’s own data centres and its deployment will scale the bank’s mission-critical systems and services, Oracle said.

@@ -1,1 +1,0 @@
-We have moved well beyond the management of structured data and manual analysis to much larger data sets and automated analysis of unstructured data.
