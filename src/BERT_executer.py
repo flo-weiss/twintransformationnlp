@@ -360,7 +360,7 @@ def print_my_examples(reloaded_model, classifier_model):
     'It is important to transform digitally and sustainably at the same time!',
     'It is important to promote the digital and sustainability transformation at the same time!',
     'AI Builder is bringing Azure OpenAI Service to its user-friendly, low-code experience—enabling makers to use next-generation AI capabilities with Power Automate and Power Apps.',
-    'Let’s eliminate fear in corporations once and for all. It’s time .',
+    'Let’s eliminate fear in corporations once and for all. It’s time.',
     'We are excited to start the search for our first Vice President of Digital Transformation.',
     'We use our rare combination of expertise in sustainability science, strategy, and storytelling to help our clients generate value by pursuing one of the world’s most critical imperatives – creating a truly sustainable economy, society, and environment.',
     'On behalf of the International Womens Day, I took some time to reflect on the road so far: from having a dream, to working hard for it and to finally living it.'
