@@ -43,7 +43,6 @@ def main():
     classifier_model = build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder)
 
     training(tfhub_handle_encoder, train_ds, val_ds, classifier_model)
-    evaluation()
     export()
     print_my_examples()
 
@@ -306,7 +305,7 @@ def training(tfhub_handle_encoder, train_ds, val_ds, classifier_model):
                                    validation_data=val_ds,
                                    epochs=epochs)
 
-def evaluation():
+    #Ab hier Evaluation
     loss, accuracy = classifier_model.evaluate(test_ds)
 
     print(f'Loss: {loss}')
@@ -342,23 +341,19 @@ def evaluation():
     plt.ylabel('Accuracy')
     plt.legend(loc='lower right')
 
-def export():
-    #TODO: Auch hier sollten Namen für das Modell automatisch zugeordnet werden und das Ganze im Git Repo gespeichert werden
-    dataset_name = 'test'
+
+    #Ab hier Export
+    dataset_name = 'nlp_meets_tt_model'
     saved_model_path = './{}_bert'.format(dataset_name.replace('/', '_'))
 
     classifier_model.save(saved_model_path, include_optimizer=False)
 
     reloaded_model = tf.saved_model.load(saved_model_path)
 
-def print_my_examples(inputs, results):
-    result_for_printing = \
-    [f'input: {inputs[i]:<30} : score: {results[i][0]:.6f}'
-    for i in range(len(inputs))]
-    print(*result_for_printing, sep='\n')
-    print()
+    return reloaded_model
 
-    #TODO: Hier passende Beispiele einfügen
+def print_my_examples(reloaded_model):
+     #TODO: Hier passende Beispiele einfügen
     examples = [
     'this is such an amazing movie!',  # this is the same sentence tried earlier
     'The movie was great!',
