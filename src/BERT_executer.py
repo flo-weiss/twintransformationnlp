@@ -42,9 +42,9 @@ def main():
 
     classifier_model = build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder)
 
-    training(tfhub_handle_encoder, train_ds, val_ds, classifier_model)
-    export()
-    print_my_examples()
+    reloaded_model = training(tfhub_handle_encoder, train_ds, val_ds, classifier_model)
+    print_my_examples(reloaded_model, classifier_model))
+    print("Yippie!")
 
 def createDS():
     AUTOTUNE = tf.data.AUTOTUNE
@@ -352,7 +352,7 @@ def training(tfhub_handle_encoder, train_ds, val_ds, classifier_model):
 
     return reloaded_model
 
-def print_my_examples(reloaded_model):
+def print_my_examples(reloaded_model, classifier_model):
      #TODO: Hier passende Beispiele einfügen
     examples = [
     'this is such an amazing movie!',  # this is the same sentence tried earlier
