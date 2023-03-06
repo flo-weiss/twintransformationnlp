@@ -42,8 +42,8 @@ def main():
 
     classifier_model = build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder)
 
-    reloaded_model = training(tfhub_handle_encoder, train_ds, val_ds, classifier_model)
-    print_my_examples(reloaded_model, classifier_model))
+    reloaded_model = training(tfhub_handle_encoder, train_ds, test_ds, val_ds, classifier_model)
+    print_my_examples(reloaded_model, classifier_model)
     print("Yippie!")
 
 def createDS():
@@ -281,7 +281,7 @@ def build_classifier_model(tfhub_handle_preprocess, tfhub_handle_encoder):
     #War vorher: return tf.keras.Model(text_input, net)
     return tf.keras.Model(text_input, net)
 
-def training(tfhub_handle_encoder, train_ds, val_ds, classifier_model):
+def training(tfhub_handle_encoder, train_ds, test_ds, val_ds, classifier_model):
     loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
     metrics = tf.metrics.BinaryAccuracy()
 
@@ -340,7 +340,6 @@ def training(tfhub_handle_encoder, train_ds, val_ds, classifier_model):
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.legend(loc='lower right')
-
 
     #Ab hier Export
     dataset_name = 'nlp_meets_tt_model'
